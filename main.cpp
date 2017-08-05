@@ -771,8 +771,9 @@ void solve3D()
         // try synthesizing (may fail)
         int num_solids;
         if (synthesize(S, pal2id[255]/*empty*/, num_solids, sub)) {
-          if (num_solids >= num_solids_before) { // only accept if less (or eq) non empty appear
+          if (num_solids > num_solids_before) { // only accept if less (or eq) non empty appear
             num_success++;
+            break;
           } else {
             num_failed++;
             S = backup;
@@ -791,6 +792,10 @@ void solve3D()
     // display progress
     Console::cursorGotoPreviousLineStart();
     std::cerr << sprint("attempt %3d / %3d, failures: %3d, successes: %3d\n", (p+1) * num_sub_synth, num_sub_synth*num_passes, num_failed, num_success);
+
+    if (num_success > 2 && p > 1) {
+      break;
+    }
   }
 
   // output final
